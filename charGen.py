@@ -63,7 +63,7 @@ def makeChar(myRace, myClass, myLevel = 1):
 	hd = 0 #initializing hd(hit dice) for later
 	
 	for x in data:
-		stats['hp'] = max(1, x[0] + (stats['constitution']-10))
+		stats['hp'] = max(1, x[0] + (stats['constitution']-10)/2)
 		hd = x[0] 
 		skillmod = x[1]
 	
@@ -134,7 +134,7 @@ def makeChar(myRace, myClass, myLevel = 1):
 	
 	
 for i in range (0, 3):
-	myChar = makeChar(race, theClass, 20)
+	myChar = makeChar(race, theClass, 5)
 	print '%s %d'%(race,i)
 	print '<table border="1">'
 	print '<tr>', '<td>', 'HP:', '</td>', '<td>', myChar['hp'], '</td>', '</tr>'
