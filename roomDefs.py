@@ -67,13 +67,23 @@ def makePaths(rooms, map):
 		weights.append((0, i, heuristic(rooms[0].midPoint,rooms[i].midPoint)))
 	while free:
 		low = min(weights, key = lambda tup: tup[2])
-		weights = [i for i in weights if i[1] == low[0]]
+		#weights = [i for i in weights if i[1] == low[0]]
+		
+		for f in mst:
+			mp = rooms[rooms.index(f)].midPoint
+			weights.remove((rooms.index(f),low[1],heuristic(rooms[low[1]].midPoint,mp)))
+		try:
+			free.remove(rooms[low[1]])
+			mst.append(rooms[low[1]])
+		except myError:
+			pass
 		path = A_star(rooms, map, low[0], low[1])
 		paths.append(path)
-		free.remove(rooms[low[1]])
+		
+		
 		for i in free:
 			weights.append((low[1],rooms.index(i), heuristic(rooms[low[1]].midPoint,i.midPoint)))
-		mst.append(rooms[low[1]])
+			
 	return paths
 
 	
