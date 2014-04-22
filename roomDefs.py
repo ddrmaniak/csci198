@@ -63,25 +63,27 @@ def makePaths(rooms, map):
 	weights = []
 	paths = []
 	mst, free  = [rooms[0]], rooms[1:]
-	for i in range (1, len(rooms)):
+	for i in range (1, len(rooms)):#this gets some initial values into weights
 		weights.append((0, i, heuristic(rooms[0].midPoint,rooms[i].midPoint)))
+		
 	while free:
 		low = min(weights, key = lambda tup: tup[2])
 		#weights = [i for i in weights if i[1] == low[0]]
 		
-		for f in mst:
+		for f in mst:#eliminates all weights between each member of mst as they are added
 			mp = rooms[rooms.index(f)].midPoint
 			weights.remove((rooms.index(f),low[1],heuristic(rooms[low[1]].midPoint,mp)))
-		try:
-			free.remove(rooms[low[1]])
-			mst.append(rooms[low[1]])
+			
+		try:#sometimes it makes a connection to something already in mst, so I threw in this try/catch
+			free.remove(rooms[low[1]])#remove the room that we're making a connection to
+			mst.append(rooms[low[1]])#and add it to the MST that we're building
 		except myError:
 			pass
-		path = A_star(rooms, map, low[0], low[1])
-		paths.append(path)
+			
+		path = A_star(rooms, map, low[0], low[1])#uses A* to make a path between two rooms
+		paths.append(path)#adds it to the list of paths that will be returned
 		
-		
-		for i in free:
+		for i in free:#adds new weights from mst's newly added room to everything in free
 			weights.append((low[1],rooms.index(i), heuristic(rooms[low[1]].midPoint,i.midPoint)))
 			
 	return paths
