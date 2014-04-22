@@ -34,12 +34,21 @@ for i in range (cellsSqrt):
 #making each room
 rooms = []
 roomDefs.assignCells(rooms, cells, rNum, form, cellsSqrt)
+for i in rooms:
+	i.setMid(cellsize)
+	
 
 #update the map grid with the room locations
 for i in range(rNum):
 	for j in range (rooms[i].height):
 		for k in range (rooms[i].width):
 			map[rooms[i].cell[0]*cellsize+j][rooms[i].cell[1]*cellsize+k] = str(i)
+			
+paths = roomDefs.makePaths(rooms, map)
+for path in paths:
+	for s in path:
+		if map[s[0]][s[1]] == '@':
+			map[s[0]][s[1]] = ' '
 
 #print out the HTML
 print "Content-Type: text/html;charset=utf-8\r\n"
@@ -48,11 +57,14 @@ print "<!doctype html>"
 print "<html><body>"
 print "<style>body {font-family:'Courier New';}</style>"
 print '<table bordercolor="000000" style="border-collapse:collapse">'
+
 for i in range(len(map)):
 	print '<tr>'
 	for j in range(len(map)):
 		if map[i][j] == '@':
 			print '<td bgcolor="000000">','_'*(len(str(len(rooms)))),'</td>'
+		elif map[i][j] == ' ':
+			print '<td bgcolor="FFFFFF">','&nbsp;'*(len(str(len(rooms)))),'</td>'
 		else:
 			avg = 16777215/(len(rooms)+2)
 			num = hex(avg*(int(map[i][j])+1))[2:]
@@ -69,6 +81,8 @@ for i in range(len(map)):
 			print '<td bgcolor="',num,'">',map[i][j],'</td>'
 	print '</tr>'
 print '</table>'
+
+print '<br>'
 for i in range(len(rooms)):
-	print i,':',rooms[i].width,'x',rooms[i].height,' color: <table style="display:inline;"><tr><td bgcolor="',hex(avg*(i+1))[2:],'">&nbsp;&nbsp;</td></tr></table><br>'
+	print i,':',rooms[i].width,'x',' color: <table style="display:inline;"><tr><td bgcolor="',hex(avg*(i+1))[2:],'">&nbsp;&nbsp;</td></tr></table>', '<br>'
 print "</body></html>"
