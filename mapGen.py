@@ -5,7 +5,7 @@
 
 
 # enable debugging
-import cgitb, cgi, random,roomDefs
+import cgitb, cgi, random, roomDefs, charDefs
 cgitb.enable()
 
 form = cgi.FieldStorage()
@@ -50,6 +50,13 @@ for path in paths:
 		if map[s[0]][s[1]] == '@':
 			map[s[0]][s[1]] = ' '
 
+def makeEncounters(rooms, EL):
+	encounters = []
+	for i in range (0,len(rooms)):
+		encounters.append(charDefs.makeChar('orc', 'warrior', EL))
+	return encounters
+
+enc = makeEncounters(rooms,int(form['EL'].value))
 #print out the HTML
 print "Content-Type: text/html;charset=utf-8\r\n"
 print
@@ -85,4 +92,6 @@ print '</table>'
 print '<br>'
 for i in range(len(rooms)):
 	print i,':',rooms[i].width,'x',' color: <table style="display:inline;"><tr><td bgcolor="',hex(avg*(i+1))[2:],'">&nbsp;&nbsp;</td></tr></table>', '<br>'
+	print 'HP', enc[i]['hp'], 'initiative', enc[i]['initiative'], 'speed', enc[i]['speed'], '<br>' ,'ac', enc[i]['ac'], 'base attack bonus', enc[i]['baseAttackBonus'], 'strength', enc[i]['strength']
+	print 'dexterity', enc[i]['dexterity'], '<br>','constitution', enc[i]['constitution'], 'intelligence', enc[i]['intelligence'], 'wisdom', enc[i]['wisdom'], 'charisma', enc[i]['charisma'],'<br><br>'
 print "</body></html>"
