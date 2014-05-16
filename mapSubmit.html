@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 
 <html>
+<head>
+<script type="text/javascript" src="http://happyhippyhaven.com/jquery.js"></script>
+<script type="text/javascript" src="http://happyhippyhaven.com/jquery.min.js"></script>
 
+</head>
 <body>
 
 <form action="mapGen.py" method="post" id="form1">
@@ -14,9 +18,21 @@ Party level: <input type="text" name="EL"><br>
 <input type="submit" value="Generate Map">
 
 </form>
+<div id="div1"></div>
 
+<script>
+$("#form1").submit(function(event){
+			event.preventDefault();
 
-
+			$.post( 'mapGen.py',
+				 $(this).serialize(),
+				function(data){$("#div1").html(data).find("#map")
+				}
+			 );
+			return false;
+			
+});
+</script>
 </body>
 
 </html>

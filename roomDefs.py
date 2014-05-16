@@ -2,8 +2,12 @@ import random
 import math
 class Room:
 	def __init__(self, minSize, maxSize):
-		self.width = random.randint(minSize,maxSize)
-		self.height = random.randint(minSize,maxSize)
+		if minSize < maxSize:
+			self.width = random.randint(minSize,maxSize)
+			self.height = random.randint(minSize,maxSize)
+		else:
+			self.width = minSize
+			self.height = minSize
 		self.cell = None,None
 		self.midPoint = 0,0
 	def setMid(self, cellSize):
@@ -59,7 +63,7 @@ def tracePath(goal, cSet):
 		curr = [i for i in cSet if i[0] == curr[1]][0]#sets curr to the parent of the current node
 	return path
 
-def makePaths(rooms, map):
+def makePaths(rooms, map):#uses a minimum spanning tree to determine which rooms to connect
 	weights = []
 	paths = []
 	mst, free  = [rooms[0]], rooms[1:]
@@ -70,7 +74,7 @@ def makePaths(rooms, map):
 		low = min(weights, key = lambda tup: tup[2])
 		#weights = [i for i in weights if i[1] == low[0]]
 		
-		for f in mst:#eliminates all weights between each member of mst as they are added
+		for f in mst:#eliminates all weights between members of mst as they are added
 			mp = rooms[rooms.index(f)].midPoint
 			weights.remove((rooms.index(f),low[1],heuristic(rooms[low[1]].midPoint,mp)))
 			
